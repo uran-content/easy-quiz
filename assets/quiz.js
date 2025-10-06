@@ -31,17 +31,34 @@ const renderQuestions = (answers = []) => {
     quizData.questions.forEach((question, index) => {
         const block = document.createElement('div');
         block.className = 'question-item';
-        block.innerHTML = `<h3>${index + 1}. ${question.text}</h3>`;
+
+        const heading = document.createElement('h3');
+        heading.textContent = `${index + 1}. ${question.text ?? ''}`;
+        block.appendChild(heading);
 
         const answersWrapper = document.createElement('div');
         answersWrapper.className = 'answers';
 
-        question.choices.forEach((choice, choiceIndex) => {
+        (question.choices || []).forEach((choice, choiceIndex) => {
             const id = `q${index}_choice${choiceIndex}`;
             const label = document.createElement('label');
             label.setAttribute('for', id);
-            const checked = answers[index] != null && Number(answers[index]) === choiceIndex ? 'checked' : '';
-            label.innerHTML = `<input type="radio" id="${id}" name="answers[${index}]" value="${choiceIndex}" ${checked} required><span>${choice}</span>`;
+
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.id = id;
+            input.name = `answers[${index}]`;
+            input.value = String(choiceIndex);
+            input.required = true;
+            if (answers[index] != null && Number(answers[index]) === choiceIndex) {
+                input.checked = true;
+            }
+
+            const text = document.createElement('span');
+            text.textContent = choice ?? '';
+
+            label.appendChild(input);
+            label.appendChild(text);
             answersWrapper.appendChild(label);
         });
 
