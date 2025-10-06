@@ -1,0 +1,68 @@
+body.student {
+    background-color: var(--bg);
+}
+
+.student-layout {
+    max-width: 720px;
+    margin: -40px auto 40px;
+    padding: 0 16px;
+    display: grid;
+    gap: 20px;
+}
+
+.join-card h2,
+.quiz-card h2 {
+    margin-top: 0;
+}
+
+.quiz-state {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: rgba(75, 123, 236, 0.1);
+}
+
+.question-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #fff;
+}
+
+.question-item h3 {
+    margin-top: 0;
+}
+
+.answers {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.answers label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.answers input[type="radio"] {
+    transform: scale(1.1);
+}
+
+.answers label:hover {
+    border-color: var(--accent);
+    background-color: rgba(75, 123, 236, 0.08);
+}
+
+#submissionResult {
+    padding: 16px;
+    border-radius: 12px;
+    background-color: rgba(32, 191, 107, 0.12);
+}

@@ -1,0 +1,205 @@
+:root {
+    --bg: #f7f8fb;
+    --card-bg: #ffffff;
+    --accent: #4b7bec;
+    --accent-dark: #3867d6;
+    --danger: #eb3b5a;
+    --text: #1e272e;
+    --muted: #808e9b;
+    --border: #dcdde1;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+.page-header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #fff;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+.page-header p {
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container {
+    max-width: 960px;
+    margin: -80px auto 40px;
+    padding: 0 16px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(56, 103, 214, 0.1);
+}
+
+.info-card {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(75, 123, 236, 0.15);
+    outline: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--accent);
+    color: #fff;
+    font-size: 1rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(75, 123, 236, 0.25);
+}
+
+button.secondary {
+    background-color: #fff;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+button.secondary:hover {
+    box-shadow: none;
+    background-color: rgba(75, 123, 236, 0.08);
+}
+
+button.tiny {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    background-color: rgba(75, 123, 236, 0.12);
+    color: var(--accent-dark);
+    border: 1px solid rgba(75, 123, 236, 0.4);
+}
+
+button.tiny:hover {
+    transform: none;
+    box-shadow: none;
+    background-color: rgba(75, 123, 236, 0.22);
+}
+
+button.tiny.danger {
+    color: var(--danger);
+    border-color: rgba(235, 59, 90, 0.4);
+    background-color: rgba(235, 59, 90, 0.08);
+}
+
+button.tiny.danger:hover {
+    background-color: rgba(235, 59, 90, 0.16);
+}
+
+.question-block {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    background-color: #fefefe;
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.choice-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.choice-row input[type="text"] {
+    padding: 10px;
+}
+
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns: 1fr;
+        margin-top: -40px;
+    }
+
+    .info-card {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .choice-row {
+        grid-template-columns: auto 1fr;
+        gap: 8px;
+    }
+
+    .choice-row button {
+        grid-column: span 2;
+        justify-self: start;
+    }
+}
