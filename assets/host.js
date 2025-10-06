@@ -1,5 +1,18 @@
 const pollInterval = 3000;
 
+const escapeHtml = (value) =>
+    String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+const toSafeNumber = (value) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const statsContainer = document.getElementById('statsContainer');
     const quizId = statsContainer.dataset.quiz;
@@ -14,14 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const summary = `Участников: <strong>${data.participants}</strong> · Ответы получены: <strong>${data.responded}</strong>`;
+        const participantsCount = toSafeNumber(data.participants);
+        const respondedCount = toSafeNumber(data.responded);
+        const summary = `Участников: <strong>${participantsCount}</strong> · Ответы получены: <strong>${respondedCount}</strong>`;
         const blocks = data.questions.map((question, idx) => {
             const items = question.choices.map((choice) => {
                 const badgeClass = choice.isCorrect ? 'badge correct' : 'badge';
                 const liClass = choice.isCorrect ? 'correct' : '';
-                return `<li class="${liClass}"><span class="label">${choice.text}</span><span class="${badgeClass}">${choice.count}</span></li>`;
+                const choiceCount = toSafeNumber(choice.count);
+                return `<li class="${liClass}"><span class="label">${escapeHtml(choice.text)}</span><span class="${badgeClass}">${choiceCount}</span></li>`;
             }).join('');
-            return `<div class="stats-question"><h3>${idx + 1}. ${question.text}</h3><ul>${items}</ul></div>`;
+            return `<div class="stats-question"><h3>${idx + 1}. ${escapeHtml(question.text)}</h3><ul>${items}</ul></div>`;
         }).join('');
 
         statsContainer.innerHTML = `<div class="stats-summary">${summary}</div>${blocks}`;
