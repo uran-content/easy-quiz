@@ -1,0 +1,16 @@
+<svg width="220" height="180" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="titleQuiz">
+  <title id="titleQuiz">Экран с вопросами квиза</title>
+  <defs>
+    <linearGradient id="panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4b7bec" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#3867d6" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="20" width="200" height="140" rx="18" fill="url(#panel)"/>
+  <rect x="26" y="40" width="168" height="20" rx="6" fill="rgba(255,255,255,0.2)"/>
+  <rect x="26" y="70" width="120" height="18" rx="5" fill="rgba(255,255,255,0.75)"/>
+  <rect x="26" y="98" width="148" height="18" rx="5" fill="rgba(255,255,255,0.55)"/>
+  <rect x="26" y="126" width="96" height="18" rx="5" fill="rgba(255,255,255,0.35)"/>
+  <circle cx="180" cy="80" r="12" fill="#fff" opacity="0.85"/>
+  <path d="M175 80l6 6 12-12" stroke="#3867d6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

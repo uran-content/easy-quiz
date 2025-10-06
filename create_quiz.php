@@ -4,7 +4,7 @@ require_once __DIR__ . '/lib/helpers.php';
 default_timezone_set('UTC');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: index.php');
+    header('Location: create.php');
     exit;
 }
 
@@ -74,7 +74,7 @@ if (!empty($errors)) {
     echo '<div class="error-card">';
     echo '<h1>Не удалось сохранить квиз</h1>';
     echo '<p>' . $message . '</p>';
-    echo '<a class="button" href="index.php">Вернуться и исправить</a>';
+    echo '<a class="button" href="create.php">Вернуться и исправить</a>';
     echo '</div></body></html>';
     exit;
 }
