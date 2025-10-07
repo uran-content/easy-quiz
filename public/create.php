@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/lib/helpers.php';
+require_once __DIR__ . '/../lib/helpers.php';
 ?>
 <!DOCTYPE html>
 <html lang="ru">
