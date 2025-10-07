@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/lib/helpers.php';
+require_once __DIR__ . '/../lib/helpers.php';
 
 default_timezone_set('UTC');
 
@@ -22,7 +22,12 @@ if ($metadata === null) {
     exit;
 }
 
-$metadata['status'] = 'finished';
+if (($metadata['status'] ?? 'waiting') === 'finished') {
+    echo json_encode(['error' => 'Квиз уже завершён.']);
+    exit;
+}
+
+$metadata['status'] = 'running';
 write_metadata($quizId, $metadata);
 
 $statusLabels = [
@@ -32,6 +37,6 @@ $statusLabels = [
 ];
 
 echo json_encode([
-    'status' => 'finished',
-    'statusLabel' => $statusLabels['finished'],
+    'status' => 'running',
+    'statusLabel' => $statusLabels['running'],
 ]);
