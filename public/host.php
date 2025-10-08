@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../lib/helpers.php';
 
-default_timezone_set('UTC');
+date_default_timezone_set('UTC');
 
 $quizId = $_GET['id'] ?? '';
 $metadata = require_metadata($quizId);
