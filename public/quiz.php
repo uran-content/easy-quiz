@@ -74,6 +74,7 @@ window.__QUIZ__ = {
     participant: <?php echo json_encode($participant, JSON_UNESCAPED_UNICODE); ?>
 };
 </script>
+<script src="assets/ws-config.js"></script>
 <script src="assets/quiz.js"></script>
 </body>
 </html>

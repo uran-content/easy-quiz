@@ -1,5 +1,6 @@
 const quizData = window.__QUIZ__ || {};
 const pollInterval = 4000;
+const wsConfig = window.__WS_CONFIG__ || {};
 
 const select = (selector) => document.querySelector(selector);
 
@@ -16,6 +17,8 @@ let participant = quizData.participant || null;
 let submitted = participant?.submitted || false;
 let pollTimer = null;
 let questionsRendered = false;
+let resultSocket = null;
+const pendingMessages = [];
 
 const statusMessages = {
     waiting: 'Ожидайте начала — преподаватель скоро запустит квиз.',
@@ -96,6 +99,77 @@ const togglePolling = () => {
     pollTimer = setInterval(fetchStatus, pollInterval);
 };
 
+const buildWsUrl = () => {
+    if (!wsConfig.domain || !wsConfig.path) {
+        return null;
+    }
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const domain = String(wsConfig.domain).replace(/^wss?:\/\//, '').replace(/\/$/, '');
+    const path = `/${String(wsConfig.path).replace(/^\/+/, '')}`;
+    return `${protocol}//${domain}${path}`;
+};
+
+const connectSocket = () => {
+    if (resultSocket || !buildWsUrl()) {
+        return;
+    }
+    try {
+        resultSocket = new WebSocket(buildWsUrl());
+        resultSocket.addEventListener('open', () => {
+            while (pendingMessages.length > 0) {
+                resultSocket.send(pendingMessages.shift());
+            }
+        });
+        resultSocket.addEventListener('close', () => {
+            resultSocket = null;
+        });
+        resultSocket.addEventListener('error', () => {
+            resultSocket = null;
+        });
+    } catch (error) {
+        resultSocket = null;
+    }
+};
+
+const sendResultOverSocket = (payload) => {
+    const url = buildWsUrl();
+    if (!url) {
+        return;
+    }
+    const message = JSON.stringify({
+        type: 'quiz_result',
+        quizId: quizData.id,
+        participantId: participant?.id,
+        nickname: participant?.nickname,
+        realname: participant?.realname,
+        payload,
+    });
+
+    if (!resultSocket || resultSocket.readyState === WebSocket.CLOSED) {
+        connectSocket();
+    }
+
+    if (resultSocket && resultSocket.readyState === WebSocket.OPEN) {
+        resultSocket.send(message);
+    } else {
+        pendingMessages.push(message);
+    }
+};
+
+const collectAnswers = () => {
+    const answers = [];
+    if (!answersForm) {
+        return answers;
+    }
+    quizData.questions.forEach((_, index) => {
+        const input = answersForm.querySelector(`input[name="answers[${index}]"]:checked`);
+        if (input) {
+            answers[index] = Number(input.value);
+        }
+    });
+    return answers;
+};
+
 const fetchStatus = () => {
     fetch(`get_quiz.php?id=${encodeURIComponent(quizData.id)}`)
         .then((response) => response.json())
@@ -155,6 +229,7 @@ if (answersForm) {
         const formData = new FormData(answersForm);
         formData.append('quiz_id', quizData.id);
         formData.append('participant_id', participant.id);
+        const selectedAnswers = collectAnswers();
         fetch('submit_answers.php', {
             method: 'POST',
             body: formData,
@@ -169,6 +244,12 @@ if (answersForm) {
                 submissionResult.hidden = false;
                 submissionResult.textContent = data.message;
                 answersForm.hidden = true;
+                sendResultOverSocket({
+                    answers: selectedAnswers,
+                    score: data.score,
+                    total: data.total,
+                    submittedAt: new Date().toISOString(),
+                });
             })
             .catch(() => {
                 alert('Не удалось отправить ответы. Попробуйте ещё раз.');

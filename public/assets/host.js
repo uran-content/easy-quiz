@@ -1,4 +1,5 @@
 const pollInterval = 3000;
+const wsConfig = window.__WS_CONFIG__ || {};
 
 const escapeHtml = (value) =>
     String(value ?? '')
@@ -58,6 +59,44 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     };
 
+    const buildWsUrl = () => {
+        if (!wsConfig.domain || !wsConfig.path) {
+            return null;
+        }
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const domain = String(wsConfig.domain).replace(/^wss?:\/\//, '').replace(/\/$/, '');
+        const path = `/${String(wsConfig.path).replace(/^\/+/, '')}`;
+        return `${protocol}//${domain}${path}`;
+    };
+
+    const setupRealtimeSocket = () => {
+        const url = buildWsUrl();
+        if (!url) {
+            return;
+        }
+        try {
+            const socket = new WebSocket(url);
+            socket.addEventListener('message', (event) => {
+                try {
+                    const payload = JSON.parse(event.data);
+                    if (payload?.type === 'quiz_result' && payload.quizId === quizId) {
+                        refreshStats();
+                    }
+                } catch (error) {
+                    // ignore malformed messages
+                }
+            });
+            socket.addEventListener('error', () => {
+                socket.close();
+            });
+            socket.addEventListener('close', () => {
+                setTimeout(setupRealtimeSocket, 3000);
+            });
+        } catch (error) {
+            // ignore connection errors
+        }
+    };
+
     const postAction = (endpoint) => {
         const formData = new FormData();
         formData.append('id', quizId);
@@ -107,4 +146,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     refreshStats();
     setInterval(refreshStats, pollInterval);
+    setupRealtimeSocket();
 });
