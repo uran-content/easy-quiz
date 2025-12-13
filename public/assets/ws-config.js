@@ -3,5 +3,5 @@
 // Пример: domain: 'ws.example.com', path: '/quiz-stream'
 window.__WS_CONFIG__ = {
     domain: window.location.host,
-    path: '/ws',
+    path: '/api/1',
 };
