@@ -61,6 +61,7 @@ $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' . urle
         </div>
     </section>
 </main>
+<script src="assets/ws-config.js"></script>
 <script src="assets/host.js"></script>
 </body>
 </html>
