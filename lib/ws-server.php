@@ -4,7 +4,7 @@
 
 set_time_limit(0);
 
-$host = '0.0.0.0';
+$host = '127.0.0.1';
 $port = 3001;
 
 $server = @stream_socket_server("tcp://{$host}:{$port}", $errno, $errstr);
